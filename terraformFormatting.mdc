@@ -1,0 +1,86 @@
+---
+description: Terraform/OpenTofu HCL formatting standards and conventions
+globs: ["*.tf", "*.tfvars", "*.hcl"]
+---
+
+## Terraform/OpenTofu HCL Formatting Standards
+
+All Terraform/OpenTofu HCL code must adhere to Terraform formatting standards with proper spacing and aligned elements.
+
+### Formatting Requirements
+
+1. **Indentation**: Use 2 spaces for indentation (never tabs)
+2. **Alignment**: Align equals signs within resource blocks for better readability
+3. **Spacing**: 
+   - Use blank lines to separate resources and logical sections
+   - Maintain consistent spacing within nested blocks
+4. **Line breaks**: 
+   - Keep related attributes together
+   - Break long lines appropriately for readability
+   - Maintain consistent formatting within similar resource types
+5. **File endings**: Ensure that every text file ends with exactly one blank line. Remove any extra blank lines so that only a single blank line remains at the end.
+
+### Resource Naming Conventions
+
+- **Resource names**: Use snake_case for all resource names (e.g., `aws_s3_bucket.snowflake_staging`, `aws_iam_role.firehose_direct`)
+- **Avoid redundant naming**: Do not use redundant resource names. For example, do not use `kinesis_policy` as a name for `aws_iam_role_policy`, as `policy` is already implied by the resource type. Use descriptive names that add context without repeating the resource type (e.g., `firehose_direct_kinesis` instead of `firehose_direct_kinesis_policy` for an `aws_iam_role_policy`)
+- **Variable names**: Use snake_case for variable names
+- **Local names**: Use snake_case for local variable names
+- **Module names**: Use snake_case for module names (e.g., `kinesis_snowflake_event_ledger`)
+
+### Tool Usage
+
+- **Always use `tofu` instead of `terraform`**: When referencing commands, tool usage, or in documentation/comments, use `tofu` as the tool name. For example:
+
+  - Use `tofu init` not `terraform init`
+  - Use `tofu apply` not `terraform apply`
+  - Use `tofu plan` not `terraform plan`
+  - References to the tool in code comments should say "tofu" not "terraform"
+
+Note: While the `terraform` block and providers still use `terraform` in their configurations (as that's part of the HCL syntax), any references to running or using the tool should use `tofu`.
+
+### OpenTofu Version File
+
+- **Always create `.opentofu-version` file**: When creating new Terraform/OpenTofu configurations, include a `.opentofu-version` file in the root of each environment directory (e.g., `dev/`, `uat/`, `prod/`) to specify the minimum required OpenTofu version.
+
+- **Format**: The file should contain a version constraint (e.g., `>=1.10` or `>=1.0`) followed by a single blank line.
+
+- **Location**: Place the `.opentofu-version` file in the same directory as the `main.tf` file for each environment.
+
+Example:
+```
+>=1.10
+
+```
+
+This file helps ensure consistent OpenTofu versions across environments and is compatible with version managers like `tenv/tfenv`/`tofuenv`.
+
+### Operational Safety
+
+- **Always run `tofu plan` before `tofu apply` or `tofu destroy`**: Never execute `tofu apply` or `tofu destroy` without first running `tofu plan` to review the proposed changes.
+- **Alert on resource destruction**: If `tofu plan` indicates that any resources will be destroyed, you must alert the user about the potential destruction and wait for explicit confirmation before proceeding with `tofu apply` or `tofu destroy`. Clearly communicate which resources would be destroyed and the potential impact.
+
+### Code Organization
+
+- Organize resources logically by grouping related resources together
+- Group providers and data sources at the top of files
+- Place locals after data sources but before resource definitions
+- Group outputs at the end of files or in separate `outputs.tf` files
+
+### Module File Organization
+
+When organizing Terraform modules, use service-based file naming to group related resources:
+
+- **`main.tf`**: Provider configuration, terraform block, and common data sources (e.g., `aws_caller_identity`, `aws_region`)
+- **`<service>.tf`**: Resources grouped by AWS service (e.g., `vpc.tf`, `route53.tf`, `iam.tf`, `s3.tf`, `kinesis.tf`)
+- **`variables.tf`**: All variable definitions
+- **`outputs.tf`**: All output definitions
+
+Examples:
+
+- VPC-related resources (VPC endpoints, security groups, route tables) → `vpc.tf`
+- Route53 resources (hosted zones, DNS records) → `route53.tf`
+- IAM resources (roles, policies) → `iam.tf`
+- S3 resources (buckets, bucket policies) → `s3.tf`
+
+This organization pattern makes it easier to locate and maintain resources by service type.

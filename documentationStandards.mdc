@@ -1,0 +1,8 @@
+---
+description: Documentation standards for maintaining accurate documentation when code changes
+globs: ["*.md", "README*", "*.mdx"]
+---
+
+## Documentation Standards
+
+Whenever code or any supporting files are changed, review and update relevant documentation files (such as those ending in `.md`) to ensure that instructions, descriptions, and usage examples accurately reflect the latest implementation and behavior.

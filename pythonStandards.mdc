@@ -1,0 +1,166 @@
+---
+description: Python coding standards including indentation, type hints, docstrings, and code organization
+globs: ["*.py"]
+---
+
+## Python Coding Standards
+
+When writing Python code, follow these standards for code quality, maintainability, and consistency.
+
+### Indentation
+
+- **Use 4 spaces for indentation**: All Python scripts must use 4 spaces (never tabs) for each indentation level. This applies to:
+  - Function bodies
+  - Class definitions
+  - If/else blocks
+  - For/while loops
+  - Try/except blocks
+  - All nested control structures
+
+### Function Naming and Visibility
+
+- **Public functions**: Functions that are part of the module's public API (e.g., `main()` when called from `if __name__ == '__main__'`, or functions intended to be imported by other modules) should use standard naming without leading underscores.
+
+- **Private/internal functions**: Functions that are only used internally within the module should be prefixed with a single leading underscore (`_`) to indicate they are private implementation details. This includes:
+  - Helper functions that are only called by other functions in the same module
+  - Utility functions that are not part of the public API
+  - Internal helper functions that support the main logic
+
+- **Examples**:
+  ```python
+  def main() -> None:
+      """Public entry point."""
+      result = _helper_function()
+      _process_data(result)
+  
+  def _helper_function() -> str:
+      """Private helper function."""
+      return "data"
+  
+  def _process_data(data: str) -> None:
+      """Private processing function."""
+      pass
+  ```
+
+### Type Hints
+
+- **Always use type hints**: All function parameters and return types must have type hints.
+- **Use `typing` module**: Import and use types from the `typing` module when needed (e.g., `List`, `Dict`, `Set`, `Optional`, `Any`, `Union`).
+- **Be specific**: Use specific types rather than `Any` when possible. Use `Optional[T]` for values that can be `None`.
+- **Example**:
+  ```python
+  from typing import List, Dict, Optional
+  
+  def process_items(items: List[str], metadata: Optional[Dict[str, Any]] = None) -> int:
+      """Process a list of items and return count."""
+      return len(items)
+  ```
+
+### Docstrings
+
+- **Always include docstrings**: All functions, classes, and modules must have docstrings.
+- **Use Google-style docstrings**: Follow Google-style docstring format with `Args:`, `Returns:`, and `Raises:` sections when applicable.
+- **Module docstrings**: Include a module-level docstring at the top of the file describing the module's purpose, usage, and any important notes.
+- **Function docstrings**: Include a brief description, parameter descriptions, return value description, and any exceptions that may be raised.
+- **Example**:
+  ```python
+  """
+  Module description explaining what this module does.
+  
+  Additional details about usage, environment variables, etc.
+  """
+  
+  def calculate_total(items: List[float], discount: Optional[float] = None) -> float:
+      """
+      Calculate the total price of items with optional discount.
+      
+      Args:
+          items: List of item prices to sum
+          discount: Optional discount percentage (0.0 to 1.0)
+      
+      Returns:
+          Total price after applying discount if provided
+      
+      Raises:
+          ValueError: If discount is outside valid range (0.0 to 1.0)
+      """
+      if discount is not None and (discount < 0.0 or discount > 1.0):
+          raise ValueError("Discount must be between 0.0 and 1.0")
+      total = sum(items)
+      return total * (1 - discount) if discount else total
+  ```
+
+### Code Organization
+
+- **Group imports**: Organize all imports at the top of the file and in the following order:
+  1. Standard library imports
+  2. Third-party imports
+  3. Local application imports
+- **Separate groups**: Use blank lines between import groups.
+- **Example**:
+  ```python
+  import os
+  from datetime import datetime, timedelta
+  from typing import List, Dict
+  
+  import boto3
+  
+  from local_module import helper_function
+  ```
+
+### Color-Coded Messaging Functions
+
+Python scripts should use the same color-coded messaging pattern as shell scripts (see **Shell Script Formatting** section above). The Python implementation uses ANSI escape codes and requires no additional imports beyond the standard library.
+
+Include the following color definitions and messaging functions in your Python scripts:
+
+```python
+# Color output (ANSI escape codes)
+RED = '\033[0;31m'
+GREEN = '\033[0;32m'
+YELLOW = '\033[1;33m'
+BLUE = '\033[0;34m'
+NC = '\033[0m'  # No color
+
+
+def _echo_info(message: str) -> None:
+    """
+    Print an informational message in green with ':: ' prefix.
+    
+    Args:
+        message: The message to print
+    """
+    print(f"{GREEN}:: {message}{NC}")
+
+
+def _echo_warn(message: str) -> None:
+    """
+    Print a warning message in yellow with '>> ' prefix.
+    
+    Args:
+        message: The message to print
+    """
+    print(f"{YELLOW}>> {message}{NC}")
+
+
+def _echo_error(message: str) -> None:
+    """
+    Print an error message in red with '>> ERROR: ' prefix.
+    
+    Args:
+        message: The message to print
+    """
+    print(f"{RED}>> ERROR: {message}{NC}")
+
+
+def _echo_debug(message: str) -> None:
+    """
+    Print a debug message in blue with indentation.
+    
+    Args:
+        message: The message to print
+    """
+    print(f"{BLUE}   {message}{NC}")
+```
+
+**Note:** These functions use private naming (leading underscore) as they are internal helper functions. For usage guidelines and examples, refer to the **Shell Script Formatting** section above. The same color conventions and prefixes apply: `_echo_info()` for informational messages, `_echo_warn()` for warnings, `_echo_error()` for errors, and `_echo_debug()` for debug output.

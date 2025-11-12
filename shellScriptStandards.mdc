@@ -1,0 +1,70 @@
+---
+description: Shell script formatting standards, indentation, and color-coded messaging conventions
+globs: ["*.sh", "*.bash"]
+---
+
+## Shell Script Formatting
+
+When writing shell scripts (including user_data scripts for EC2 instances, startup scripts, etc.), use consistent formatting conventions.
+
+### Indentation
+
+- **Use 2 spaces for indentation**: All shell scripts must use 2 spaces (never tabs, never 4 spaces) for each indentation level. This applies to:
+  - Function bodies
+  - If/else blocks
+  - Case statements
+  - For/while loops
+  - All nested control structures
+
+### Color-Coded Messaging Functions
+
+Use color-coded helper functions for consistent, visually distinguishable output in shell scripts. Include the following color definitions and messaging functions at the top of your scripts:
+
+```bash
+# Color output
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[1;33m'
+BLUE='\033[0;34m'
+NC='\033[0m'
+
+echo_info() {
+  echo -e "${GREEN}:: $1${NC}"
+}
+
+echo_warn() {
+  echo -e "${YELLOW}>> $1${NC}"
+}
+
+echo_error() {
+  echo -e "${RED}>> ERROR: $1${NC}"
+}
+
+echo_debug() {
+  echo -e "${BLUE}   $1${NC}"
+}
+```
+
+**Usage Guidelines:**
+
+- **`echo_info()`**: Use for informational messages and successful operations (green, `:: ` prefix)
+- **`echo_warn()`**: Use for warnings and non-critical issues (yellow, `>> ` prefix)
+- **`echo_error()`**: Use for errors and failures (red, `>> ERROR: ` prefix)
+- **`echo_debug()`**: Use for debug/verbose output (blue, indented with 3 spaces)
+
+**Example Usage:**
+
+```bash
+echo_info "Starting installation..."
+echo_info "Installation completed successfully"
+echo_warn "Configuration file not found, using defaults"
+echo_error "Failed to start service"
+echo_debug "Processing item: ${item_name}"
+```
+
+**Legacy Prefix Convention (for scripts without color support):**
+
+If color output is not available or desired, use the following prefix conventions:
+
+- **Regular messages**: Prefix with `:: ` (double colon and space)
+- **Error messages**: Prefix with `>> ` (double greater-than and space)
