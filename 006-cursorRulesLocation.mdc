@@ -30,7 +30,15 @@ actions:
     message: |
       When creating Cursor rules:
 
-      1. Always place rule files in PROJECT_ROOT/.cursor/rules/:
+      1. Always place global rule files in $HOME/.cursor/rules/:
+         ```
+         .cursor/rules/
+         ├── your-rule-name.mdc
+         ├── another-rule.mdc
+         └── ...
+
+
+      2. Always place project rule files in PROJECT_ROOT/.cursor/rules/:
          ```
          .cursor/rules/
          ├── your-rule-name.mdc
@@ -38,12 +46,23 @@ actions:
          └── ...
          ```
 
-      2. Follow the naming convention:
+      3. Follow the naming convention:
          - Use kebab-case for filenames
          - Always use .mdc extension
          - Make names descriptive of the rule's purpose
 
-      3. Directory structure:
+      4. Directory structure:
+         Global:
+         ```
+         $HOME/
+         ├── .cursor/
+         │   └── rules/
+         │       ├── your-rule-name.mdc
+         │       └── ...
+         └── ...
+         ```
+
+         Project:
          ```
          PROJECT_ROOT/
          ├── .cursor/
