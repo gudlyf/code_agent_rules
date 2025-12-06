@@ -1,0 +1,83 @@
+---
+description: Git commit message formatting standards using conventional commits with full file path scopes
+globs: ["*"]
+---
+
+## Git Commit Message Formatting
+
+When creating git commit messages, follow these standards to ensure consistency and clarity.
+
+### Format
+
+Use the conventional commit format:
+
+```
+type(scope): description
+```
+
+### Commit Types
+
+Use one of the following types:
+
+- **feat**: A new feature
+- **fix**: A bug fix
+- **build**: Changes that affect the build system or external dependencies
+- **chore**: Changes to the build process or auxiliary tools
+- **ci**: Changes to CI configuration files and scripts
+- **docs**: Documentation only changes
+- **style**: Changes that do not affect the meaning of the code (formatting, missing semicolons, etc.)
+- **refactor**: A code change that neither fixes a bug nor adds a feature
+- **perf**: A code change that improves performance
+- **test**: Adding missing tests or correcting existing tests
+
+### Scope
+
+The scope should be the **full file path** of the changed file, relative to the repository root.
+
+**Examples:**
+- `golang/cmd/gudcommit/main.go`
+- `terraform/module/bedrock.tf`
+- `python/utils/helpers.py`
+- `docs/README.md`
+
+### Description
+
+- **Be concise and clear**: Write a brief, imperative-mood description of what changed
+- **Focus on WHAT changed and WHY**: Clearly state what was modified and the reason for the change
+- **Do not guess**: Never include descriptions that speculate about changes. Avoid phrases like:
+  - "it looks like"
+  - "likely"
+  - "probably"
+  - "seems to"
+  - "appears to"
+- **Be specific**: Describe the actual change made, not assumptions about what might have changed
+
+### Multiple File Changes
+
+**Each changed file should have its own commit entry.** When multiple files are modified, create separate commits for each file rather than grouping them into a single commit.
+
+### Examples
+
+**Good:**
+```
+feat(golang/cmd/gudcommit/main.go): add command-line flag parsing
+fix(terraform/module/bedrock.tf): correct IAM role policy attachment
+docs(README.md): update installation instructions
+refactor(python/utils/helpers.py): extract validation logic into separate function
+```
+
+**Bad:**
+```
+feat(src): add new feature
+fix(code): it looks like there was a bug
+chore(files): likely updated some configuration
+```
+
+### Guidelines
+
+1. Use the imperative mood ("add" not "added", "fix" not "fixed")
+2. Keep descriptions under 72 characters when possible
+3. Capitalize the first letter of the description
+4. Do not end the description with a period
+5. Use the full file path as the scope, not directories or abbreviated paths
+6. When in doubt about what changed, review the actual diff rather than guessing
